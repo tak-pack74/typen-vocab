@@ -1,8 +1,8 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 
 export interface PrefixListState {
-  value: String[];
+  value: string[];
 }
 
 const initialState: PrefixListState = {
@@ -13,10 +13,10 @@ export const prefixSlice = createSlice({
   name: 'prefix',
   initialState,
   reducers: {
-    add: (state, action: PayloadAction<String>) => {
+    add: (state, action: PayloadAction<string>) => {
         state.value.push(action.payload);
     },
-    remove: (state, action: PayloadAction<String>) => {
+    remove: (state, action: PayloadAction<string>): void => {
         state.value = state.value.filter(prefix => {
           return prefix !== action.payload
         });

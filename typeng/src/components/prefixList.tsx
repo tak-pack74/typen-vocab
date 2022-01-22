@@ -1,13 +1,18 @@
-import React from "react";
-import { Checkbox, List, ListItem, ListItemIcon, ListItemText, ListItemButton, Typography, Paper, Button } from '@mui/material';
+import React, { useState } from "react";
+import { Checkbox, List, ListItem, ListItemText, Typography, Paper, Button } from '@mui/material';
 
 import dictionary from "../dictionary";
 import { useAppSelector, useAppDispatch } from '../store'
 import { add, remove, selectPrefixList } from '../features/prefix_list/prefixSlice'
 
+import TypingGameModal from "./TypingGameModal";
+
 const PrefixList = () => {
   const dispatch = useAppDispatch();
   const hoge = useAppSelector(selectPrefixList);
+
+  const [isTypingModalOpened, setIsTypingModalOpened] = useState<boolean>(false);
+  const handleTypingModalOpen = () => setIsTypingModalOpened(true)
 
   return (
     <div>
@@ -36,8 +41,17 @@ const PrefixList = () => {
             )
           )}
         </List>
-        <Typography>{hoge.map(item => `${item}, `)}</Typography>
-        
+        <Typography>Chosen Tags = {hoge.map(item => `${item}, `)}</Typography>
+        <Button
+          color="primary"
+          onClick={handleTypingModalOpen}
+        >
+            START
+        </Button>
+        <TypingGameModal
+          isTypingModalOpened={isTypingModalOpened}
+          setIsTypingModalOpened={setIsTypingModalOpened}
+        />
       </Paper>
     </div>
     );

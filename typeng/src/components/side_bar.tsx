@@ -1,5 +1,5 @@
 import React from "react";
-import { List, ListItem, ListItemIcon, ListItemText, ListItemButton, Typography, Paper, Button } from '@mui/material';
+import { List, ListItem, ListItemText, Paper } from '@mui/material';
 
 
 
@@ -20,7 +20,6 @@ const SideBar = () => {
               </ListItem>
               ))
           }
-          
         </List>
       </Paper>
     </div>

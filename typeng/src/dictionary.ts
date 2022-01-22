@@ -1,11 +1,5 @@
 interface dictionaryInterface {
-    bi: String[]
-    pedal: String[]
-    omni: String[]
-    ling: String[]
-    tox: String[]
-    terr: String[]
-    chron: String[]
+    [key: string]: string[];
 }
 
 
