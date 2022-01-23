@@ -2,7 +2,6 @@ interface dictionaryInterface {
     [key: string]: string[];
 }
 
-
 const dictionary:dictionaryInterface = {
     bi: ["bivalve", "bimonthly", "bicycle", "bifocal", "bilingual", "billion", "biannual", "bicentennial", "biped", "bisexual"],
     pedal: ["pedestrian", "pedal", "pedestal", "pedicure", "biped"],

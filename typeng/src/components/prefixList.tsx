@@ -7,9 +7,9 @@ import { add, remove, selectPrefixList } from '../features/prefix_list/prefixSli
 
 import TypingGameModal from "./TypingGameModal";
 
-const PrefixList = () => {
+const PrefixList: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
-  const hoge = useAppSelector(selectPrefixList);
+  const chosenPrefixes = useAppSelector(selectPrefixList);
 
   const [isTypingModalOpened, setIsTypingModalOpened] = useState<boolean>(false);
   const handleTypingModalOpen = () => setIsTypingModalOpened(true)
@@ -41,17 +41,20 @@ const PrefixList = () => {
             )
           )}
         </List>
-        <Typography>Chosen Tags = {hoge.map(item => `${item}, `)}</Typography>
-        <Button
-          color="primary"
-          onClick={handleTypingModalOpen}
-        >
+        <Typography>Chosen Tags = {chosenPrefixes.map(item => `${item}, `)}</Typography>
+        {chosenPrefixes.length > 0 ? (
+        <>
+          <Button
+            color="primary"
+            onClick={handleTypingModalOpen}
+          >
             START
-        </Button>
-        <TypingGameModal
-          isTypingModalOpened={isTypingModalOpened}
-          setIsTypingModalOpened={setIsTypingModalOpened}
-        />
+          </Button>
+          <TypingGameModal
+            isTypingModalOpened={isTypingModalOpened}
+            setIsTypingModalOpened={setIsTypingModalOpened}
+          />
+        </>) : null}
       </Paper>
     </div>
     );

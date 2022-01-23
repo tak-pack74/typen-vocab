@@ -3,7 +3,7 @@ import { List, ListItem, ListItemText, Paper } from '@mui/material';
 
 
 
-const SideBar = () => {
+const SideBar: React.FunctionComponent = () => {
   return (
     <div>
       <Paper sx={{ height: '100vh', bgcolor: '#313131', color: '#ffffff' }}
