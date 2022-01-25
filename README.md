@@ -1,2 +1,2 @@
-# nanashi
+# Typen
 react typing game
