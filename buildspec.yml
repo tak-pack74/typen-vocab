@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+
+    commands:
+        - npm --prefix ./react-frontend install
+       
+  build:
+    commands:
+        - npm --prefix ./react-frontend run build
+     
+artifacts:
+  files:
+    - '**/*'
+  base-directory: 'build'
