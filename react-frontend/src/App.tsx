@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 
-import Sidebar from './components/side_bar';
+import Sidebar from './components/sideBar';
 import PrefixList from './components/prefixList';
 
 const gridStyle = {
