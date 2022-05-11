@@ -4,9 +4,9 @@ import { Modal, Paper, Typography } from '@mui/material';
 import { useAppSelector } from '../store'
 import { selectPrefixList } from '../features/prefix_list/prefixSlice'
 
-import dictionary from "../dictionary";
 import useKeyPress from '../hooks/useKeyPress';
 import APIService from './APIservice'
+
 
 // TODO：コンポーネントにまたがる状態管理はReduxに一元化すること
 type Props = {
@@ -14,8 +14,23 @@ type Props = {
   setIsTypingModalOpened: Function;
 }
 
+interface prefixDataset{
+  prefix: string
+  meaning: string
+  words: string[]
+}
+
+function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
+  if (val === undefined || val === null) {
+    throw new Error(
+      `Expected 'val' to be defined, but received ${val}`
+    );
+  }
+}
+
 const TypingGameModal: React.FunctionComponent<Props> = props => {
   const prefixList = useAppSelector(selectPrefixList);
+  const dictionary:prefixDataset[] = require('../dictionary.json'); 
 
   // ローカルstate
   const [typedWords, setTypedWords] = useState<string[]>([]);
@@ -29,7 +44,11 @@ const TypingGameModal: React.FunctionComponent<Props> = props => {
   useEffect(() => {
     let wordList:string[] = [];
     prefixList.map(
-      prefix => wordList = [ ...wordList, ...dictionary[prefix]]
+      prefix => {
+        const wordsOfPrefix = dictionary.find(item => item.prefix == prefix)
+        assertIsDefined(wordsOfPrefix)
+        wordList = [ ...wordList, ...wordsOfPrefix.words ];
+      }
     );
     setTypedWords([]);
     setTypedChar('');
