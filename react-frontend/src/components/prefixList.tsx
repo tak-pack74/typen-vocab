@@ -1,11 +1,17 @@
 import React, { useState } from "react";
-import { Checkbox, List, ListItem, ListItemText, Typography, Paper, Button } from '@mui/material';
+import { Grid, Typography, Paper, Button } from '@mui/material';
 
-import dictionary from "../dictionary";
 import { useAppSelector, useAppDispatch } from '../store'
 import { add, remove, selectPrefixList } from '../features/prefix_list/prefixSlice'
 
 import TypingGameModal from "./TypingGameModal";
+
+interface prefixDataset{
+  prefix: string
+  meaning: string
+  words: string[]
+}
+
 
 const PrefixList: React.FunctionComponent = () => {
   const dispatch = useAppDispatch();
@@ -14,33 +20,35 @@ const PrefixList: React.FunctionComponent = () => {
   const [isTypingModalOpened, setIsTypingModalOpened] = useState<boolean>(false);
   const handleTypingModalOpen = () => setIsTypingModalOpened(true)
 
+  const dictionary:prefixDataset[] = require('../dictionary.json'); 
+
+  const cardStyle = {
+    zIndex: 1,
+    borderRadius: 4,
+    backgroundColor: '#fff',
+    height: '100%',
+    width: '100%'
+  }
+
   return (
     <div>
-      <Paper sx={{
-          height: '100vh',
-          bgcolor: '#dddddd'
-        }}
+      <Paper
         elevation={0}
         square={true}
       >
-        <List>
-          {Object.entries(dictionary).map(
-            dict_item => (
-                <ListItem>
-                  <Checkbox
-                    onChange={e => 
-                      { if (e.target.checked) {
-                        dispatch(add(dict_item[0]))
-                      } else {
-                        dispatch(remove(dict_item[0]))
-                      }
-                    }}
-                  />
-                  <ListItemText primary={dict_item[0]} sx={{ height: '100%'}}/>
-                </ListItem>
-            )
-          )}
-        </List>
+        <Grid container>
+        {dictionary.map(dict_item => (
+          <Grid item xs={3}>
+            <Button style={{width: '100%'}}>
+              <Paper variant="outlined" style={cardStyle}>
+                <Typography sx={{ fontSize: 20 }}>{dict_item.prefix}</Typography>
+                <Typography>- {dict_item.meaning}</Typography>
+                <Typography>{dict_item.words.length} Words</Typography>
+              </Paper>
+            </Button>
+          </Grid>
+        ))}
+        </Grid>
         <Typography>Chosen Tags = {chosenPrefixes.map(item => `${item}, `)}</Typography>
         {chosenPrefixes.length > 0 ? (
         <>
