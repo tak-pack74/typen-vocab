@@ -2,11 +2,9 @@ import React, { useState, useEffect } from "react";
 
 import { Modal, Paper, Typography } from '@mui/material';
 import { useAppSelector } from '../store'
-import { selectPrefixList } from '../features/prefix_list/prefixSlice'
+import { selectCategoryList } from '../features/category_list/categorySlice'
 
 import useKeyPress from '../hooks/useKeyPress';
-import APIService from './APIservice'
-
 
 // TODO：コンポーネントにまたがる状態管理はReduxに一元化すること
 type Props = {
@@ -14,10 +12,15 @@ type Props = {
   setIsTypingModalOpened: Function;
 }
 
-interface prefixDataset{
-  prefix: string
-  meaning: string
-  words: string[]
+interface message{
+  message: string
+  translations: string
+}
+
+interface categoryDataset{
+  id: number
+  category: string
+  messages: message[]
 }
 
 function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
@@ -29,8 +32,8 @@ function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
 }
 
 const TypingGameModal: React.FunctionComponent<Props> = props => {
-  const prefixList = useAppSelector(selectPrefixList);
-  const dictionary:prefixDataset[] = require('../dictionary.json'); 
+  const categoryList = useAppSelector(selectCategoryList);
+  const dictionary:categoryDataset[] = require('../temporary_messages.json'); 
 
   // ローカルstate
   const [typedWords, setTypedWords] = useState<string[]>([]);
@@ -38,24 +41,24 @@ const TypingGameModal: React.FunctionComponent<Props> = props => {
   const [currentChar, setCurrentChar] = useState<string>('');
   const [followingChar, setFollowingChar] = useState<string>('');
   const [englishDefinition, setEnglishDefinition] = useState<string[]>([]);
-  const [followingWords, setFollowingWords] = useState<string[]>([]);
+  const [followingWords, setFollowingWords] = useState<message[]>([]);
 
 
   useEffect(() => {
-    let wordList:string[] = [];
-    prefixList.map(
-      prefix => {
-        const wordsOfPrefix = dictionary.find(item => item.prefix == prefix)
+    let wordList:message[] = [];
+    categoryList.map(
+      category_id => {
+        const wordsOfPrefix = dictionary.find(item => item.id == category_id)
         assertIsDefined(wordsOfPrefix)
-        wordList = [ ...wordList, ...wordsOfPrefix.words ];
+        wordList = [ ...wordList, ...wordsOfPrefix.messages ];
       }
     );
     setTypedWords([]);
     setTypedChar('');
-    setCurrentChar(wordList[0].charAt(0));
-    setFollowingChar(wordList[0].substring(1));
+    setCurrentChar(wordList[0].message.charAt(0));
+    setFollowingChar(wordList[0].message.substring(1));
     setFollowingWords(wordList.splice(1));
-  }, [prefixList]);
+  }, [categoryList]);
 
   useKeyPress(key => {
     let newTypedChar:string = typedChar;
@@ -73,17 +76,9 @@ const TypingGameModal: React.FunctionComponent<Props> = props => {
         setTypedWords(newTypedWords);
   
         // 次の単語を表示する時
-        APIService.fetchEnglishDefinition(followingWords[0])
-          .then(response => {
-            const definition_texts:string[] = response['api_response']['definitions'].map((item: { 'definition': string; 'partOfSpeech': string; }) => {
-              return item.definition
-            });
-            setEnglishDefinition(definition_texts);
-          })
-          .catch(error => console.log(error));
         setTypedChar('');
-        setCurrentChar(followingWords[0].charAt(0));
-        setFollowingChar(followingWords[0].substring(1));
+        setCurrentChar(followingWords[0].message.charAt(0));
+        setFollowingChar(followingWords[0].message.substring(1));
         setFollowingWords(followingWords.splice(1));
         return;
       };
