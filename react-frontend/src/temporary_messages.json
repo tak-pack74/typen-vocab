@@ -1,48 +1,42 @@
-{
-    "何かを追加した文": [
-        {
-            "message": "Add tests for user-defined exceptions in blueprints.",
-            "translations": {
-                "jp": "blueprint中でユーザが定義した例外パターンへのテストを追加した。"
+[
+    {
+        "id": 1,
+        "category": "何かを追加した",
+        "messages": [
+            {
+                "message": "Add tests for user-defined exceptions in blueprints.",
+                "translation": "blueprint中でユーザが定義した例外パターンへのテストを追加した。"
+            },
+            { 
+                "message": "Add a function to determine whether a path is owned by the current user.",
+                "translation": "現在のユーザがパスのownerであるか否かを判断する関数を追加した。"
+            },
+            {
+                "message": "Add test for lazy loading error.",
+                "translation": "レイジーロードエラーへのテストを追加した。"
             }
-        },
-        {
-            "message": "Add a function to determine whether a path is owned by the current user.",
-            "translations": {
-                "jp": "現在のユーザがパスのownerであるか否かを判断する関数を追加した。"
+        ]
+    },
+    {
+        "id": 2,
+        "category": "何かを修正した",
+        "messages": [
+            {
+                "message": "Add missing `of` to documentation.",
+                "translation": "ドキュメントに'of'が抜けていたので補った。"
+            },
+            {
+                "message": "Fix a broken link.",
+                "translation": "リンク切れを修正した。"
+            },
+            {
+                "message": "Fix a missing plural in documentation.",
+                "translation": "ドキュメントから複数形になっていない箇所を修正した。"
+            },
+            {
+                "message": "Fix merging confict.",
+                "translation": "マージコンフリクトを解消した。"
             }
-        },
-        {
-            "message": "Add test for lazy loading error.",
-            "translations": {
-                "jp": "レイジーロードエラーへのテストを追加した。"
-            }
-        }
-    ],
-    "何かを修正した文": [
-        {
-            "message": "Add missing `of` to documentation.",
-            "translations": {
-                "jp": "ドキュメントに'of'が抜けていたので補った。"
-            }
-        },
-        {
-            "message": "Fix a broken link.",
-            "translations": {
-                "jp": "リンク切れを修正した。"
-            }
-        },
-        {
-            "message": "Fix a missing plural in documentation.",
-            "translations": {
-                "jp": "ドキュメントから複数形になっていない箇所を修正した。"
-            }
-        },
-        {
-            "message": "Fix merging confict.",
-            "translations": {
-                "jp": "マージコンフリクトを解消した。"
-            }
-        }
-    ]
-}
+        ]
+    }
+]
