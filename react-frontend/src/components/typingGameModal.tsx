@@ -5,22 +5,12 @@ import { useAppSelector } from '../store'
 import { selectCategoryList } from '../features/category_list/categorySlice'
 
 import useKeyPress from '../hooks/useKeyPress';
+import {message, categoryDataset} from '../types/category'
 
 // TODO：コンポーネントにまたがる状態管理はReduxに一元化すること
 type Props = {
   isTypingModalOpened: boolean;
   setIsTypingModalOpened: Function;
-}
-
-interface message{
-  message: string
-  translations: string
-}
-
-interface categoryDataset{
-  id: number
-  category: string
-  messages: message[]
 }
 
 function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
@@ -32,37 +22,43 @@ function assertIsDefined<T>(val: T): asserts val is NonNullable<T> {
 }
 
 const TypingGameModal: React.FunctionComponent<Props> = props => {
-  const categoryList = useAppSelector(selectCategoryList);
-  const dictionary:categoryDataset[] = require('../temporary_messages.json'); 
+  const chosenCategories = useAppSelector(selectCategoryList);
+  const categoryDataset:categoryDataset[] = require('../temporary_messages.json'); 
 
   // ローカルstate
-  const [typedWords, setTypedWords] = useState<string[]>([]);
+  const [typedSentences, setTypedSentences] = useState<string[]>([]);
   const [typedChar, setTypedChar] = useState<string>('');
   const [currentChar, setCurrentChar] = useState<string>('');
   const [followingChar, setFollowingChar] = useState<string>('');
-  const [englishDefinition, setEnglishDefinition] = useState<string[]>([]);
-  const [followingWords, setFollowingWords] = useState<message[]>([]);
+  const [translation, setTransration] = useState<string>('');
+  const [followingSentences, setFollowingSentences] = useState<message[]>([]);
+  const [accuracy, setAccuracy] = useState<number>(0);
+  const [keyPressCount, setKeyPressCount] = useState<number>(0);
 
 
   useEffect(() => {
-    let wordList:message[] = [];
-    categoryList.map(
+    let sentencesToType:message[] = [];
+    chosenCategories.map(
       category_id => {
-        const wordsOfPrefix = dictionary.find(item => item.id == category_id)
-        assertIsDefined(wordsOfPrefix)
-        wordList = [ ...wordList, ...wordsOfPrefix.messages ];
+        const tempCategory = categoryDataset.find(item => item.id === category_id)
+        assertIsDefined(tempCategory)
+        sentencesToType = [ ...sentencesToType, ...tempCategory.messages ];
       }
     );
-    setTypedWords([]);
+    setTypedSentences([]);
     setTypedChar('');
-    setCurrentChar(wordList[0].message.charAt(0));
-    setFollowingChar(wordList[0].message.substring(1));
-    setFollowingWords(wordList.splice(1));
-  }, [categoryList]);
+    setCurrentChar(sentencesToType[0].message.charAt(0));
+    setTransration(sentencesToType[0].translation)
+    setFollowingChar(sentencesToType[0].message.substring(1));
+    setFollowingSentences(sentencesToType.splice(1));
+    setKeyPressCount(0)
+  }, [chosenCategories]);
 
   useKeyPress(key => {
     let newTypedChar:string = typedChar;
     let newFollowingChar:string = followingChar;
+
+    setKeyPressCount(keyPressCount + 1);
 
     if (key === currentChar) {
       newTypedChar += currentChar;
@@ -70,16 +66,17 @@ const TypingGameModal: React.FunctionComponent<Props> = props => {
       setCurrentChar(followingChar.charAt(0));
       
       if (followingChar.length === 0) {
-        // 打鍵済みの単語を TypedWords へ追加
-        let newTypedWords:string[] = typedWords;
-        newTypedWords.push(newTypedChar)
-        setTypedWords(newTypedWords);
+        // 打鍵済みの単語を TypedSentences へ追加
+        let newTypedSentences:string[] = typedSentences;
+        newTypedSentences.push(newTypedChar)
+        setTypedSentences(newTypedSentences);
   
-        // 次の単語を表示する時
+        // 次の文を表示する時
         setTypedChar('');
-        setCurrentChar(followingWords[0].message.charAt(0));
-        setFollowingChar(followingWords[0].message.substring(1));
-        setFollowingWords(followingWords.splice(1));
+        setCurrentChar(followingSentences[0].message.charAt(0));
+        setFollowingChar(followingSentences[0].message.substring(1));
+        setTransration(followingSentences[0].translation)
+        setFollowingSentences(followingSentences.splice(1));
         return;
       };
       
@@ -115,9 +112,9 @@ const TypingGameModal: React.FunctionComponent<Props> = props => {
           <span className='currentChar'>{currentChar}</span>
           <span>{followingChar}</span>
         </Typography>
-        {englishDefinition.map(definition =>
-          <Typography>{definition}</Typography>
-        )}
+        <Typography>{translation}</Typography>
+        <Typography>タイプ回数：{keyPressCount}</Typography>
+        <Typography>正確性：{((typedSentences.join().length + typedChar.length) / keyPressCount * 100).toFixed(1)}</Typography>
       </Paper>
     </Modal>
     )
