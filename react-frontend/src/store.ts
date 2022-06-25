@@ -1,10 +1,12 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import categoryReducer from './features/category_list/categorySlice'
+import sentenceReducer from './features/reduxSlices/sentenceSlice'
+import resultSlice from './features/reduxSlices/resultSlice';
 
 export const store = configureStore({
   reducer: {
-    category: categoryReducer,
+    sentence: sentenceReducer,
+    result: resultSlice,
   },
 });
 

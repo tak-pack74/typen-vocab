@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from '@mui/material';
 
-import MessageCategories from './components/messageCategories';
+import TypingGame from './components/typingGame';
 
 const gridStyle = {
   borderColor: "#313131",
@@ -11,7 +11,7 @@ const gridStyle = {
 function App() {
   return ( 
     <div className='App'>
-      <MessageCategories />
+      <TypingGame />
     </div>
     );
 }

@@ -20,12 +20,10 @@ const useKeyPress = (callback: (arg0: any) => any) => {
     window.addEventListener('keyup', upHandler);
 
     return () => {
-      //7
       window.removeEventListener('keydown', downHandler);
       window.removeEventListener('keyup', upHandler);
     };
   });
-  //8
   return keyPressed;
 };
 
