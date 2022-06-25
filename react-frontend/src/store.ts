@@ -1,10 +1,12 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
-import prefixReducer from './features/prefix_list/prefixSlice'
+import sentenceReducer from './features/reduxSlices/sentenceSlice'
+import resultSlice from './features/reduxSlices/resultSlice';
 
 export const store = configureStore({
   reducer: {
-    prefix: prefixReducer,
+    sentence: sentenceReducer,
+    result: resultSlice,
   },
 });
 
