@@ -6,7 +6,9 @@ import useKeyPress from '../../hooks/useKeyPress';
 import { useAppDispatch, useAppSelector } from '../../store'
 import { message, categoryDataset } from '../../types/category'
 import { selectCategory, saveSentenceIdList } from '../../features/reduxSlices/sentenceSlice'
-import { addKeyPressCount, resetKeyPressCount, addWrongKeyPressCount, resetWrongKeyPressCount } from '../../features/reduxSlices/resultSlice'
+import { addKeyPressCount, resetKeyPressCount, 
+          addWrongKeyPressCount, resetWrongKeyPressCount,
+          setStartingTime, setFinishingTime } from '../../features/reduxSlices/resultSlice'
 import listRandomSentences from "../../features/listRandomSentence";
 import { wrapHandler } from "framer-motion";
 
@@ -57,12 +59,12 @@ const TypeSentences: React.FunctionComponent<Props> = (props: Props) => {
 
     dispatch(resetKeyPressCount());
     dispatch(resetWrongKeyPressCount());
+    dispatch(setStartingTime(Date.now()));
   }, [chosenCategory]);
 
   useKeyPress(key => {
     let newTypedChar:string = typedChar;
     let newFollowingChar:string = followingChar;
-
     dispatch(addKeyPressCount());
     
     if (key === currentChar) {
@@ -72,6 +74,7 @@ const TypeSentences: React.FunctionComponent<Props> = (props: Props) => {
       
       // 現在の文を打ち終わり、かつ次の文が存在しない場合
       if (followingChar.length === 0 && followingSentences.length === 0 ) {
+        dispatch(setFinishingTime(Date.now()));
         props.handleStepChange(1);
         return;
       }
